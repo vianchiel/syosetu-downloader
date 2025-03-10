@@ -1,3 +1,4 @@
+import logging
 import os
 import requests
 import time
@@ -22,9 +23,9 @@ class noct_downloader:
                 stream=True
             )
             
-            #print(response.status_code, response.headers)
+            logging.debug(response.status_code + response.headers)
             filename = response.headers['Content-Disposition'].split('; ')[1].split('=')[1]
-            print(filename)
+            logging.debug("Writing file " + filename)
             with open(os.path.join(queue_path, filename), 'wb') as file:
                 for chunk in response.iter_content(chunk_size=16*1024):
                     file.write(chunk)
@@ -56,4 +57,4 @@ class noct_downloader:
             file.write(parsed_contents)
 
 if __name__ == '__main__':
-    main()
+    session = noct_downloader()
